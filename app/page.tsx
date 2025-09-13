@@ -56,10 +56,7 @@ export default function HomePage() {
             </Badge>
 
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 text-balance animate-fade-in-up">
-              Welcome to{" "}
-              <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent animate-gradient-shift">
-                LUMEN Quest
-              </span>
+              Welcome to <span className="text-secondary animate-pulse-glow">LUMEN Quest</span>
             </h1>
 
             <p
