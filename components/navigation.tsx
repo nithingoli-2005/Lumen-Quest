@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   Menu,
@@ -26,9 +27,10 @@ interface NavigationProps {
   onLogout?: () => void
 }
 
-export function Navigation({ isAuthenticated = true, onLogout }: NavigationProps) {
+export function Navigation({ isAuthenticated = false, onLogout }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
   const { userType, toggleUserType } = usePortal()
+  const router = useRouter()
 
   const userNavItems = [
     { href: "/", label: "Dashboard", icon: BarChart3 },
@@ -54,8 +56,15 @@ export function Navigation({ isAuthenticated = true, onLogout }: NavigationProps
 
   const handleLogout = () => {
     onLogout?.()
-    // Redirect to login page
-    window.location.href = "/auth/login"
+    router.push("/")
+  }
+
+  const handleLogin = () => {
+    router.push("/auth/login")
+  }
+
+  const handleSignup = () => {
+    router.push("/auth/signup")
   }
 
   return (
@@ -130,18 +139,14 @@ export function Navigation({ isAuthenticated = true, onLogout }: NavigationProps
               </>
             ) : (
               <>
-                <Link href="/auth/login">
-                  <Button variant="outline" size="sm" className="animate-scale-in bg-transparent">
-                    <LogIn className="w-4 h-4 mr-2" />
-                    Login
-                  </Button>
-                </Link>
-                <Link href="/auth/signup">
-                  <Button size="sm" className="animate-scale-in">
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Sign Up
-                  </Button>
-                </Link>
+                <Button variant="outline" size="sm" className="animate-scale-in bg-transparent" onClick={handleLogin}>
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Login
+                </Button>
+                <Button size="sm" className="animate-scale-in" onClick={handleSignup}>
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Sign Up
+                </Button>
               </>
             )}
           </div>
@@ -222,22 +227,26 @@ export function Navigation({ isAuthenticated = true, onLogout }: NavigationProps
                 </>
               ) : (
                 <>
-                  <Link
-                    href="/auth/login"
-                    className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200"
-                    onClick={() => setIsOpen(false)}
+                  <button
+                    onClick={() => {
+                      setIsOpen(false)
+                      handleLogin()
+                    }}
+                    className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200 w-full text-left"
                   >
                     <LogIn className="w-4 h-4" />
                     <span>Login</span>
-                  </Link>
-                  <Link
-                    href="/auth/signup"
-                    className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200"
-                    onClick={() => setIsOpen(false)}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsOpen(false)
+                      handleSignup()
+                    }}
+                    className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200 w-full text-left"
                   >
                     <UserPlus className="w-4 h-4" />
                     <span>Sign Up</span>
-                  </Link>
+                  </button>
                 </>
               )}
             </div>
