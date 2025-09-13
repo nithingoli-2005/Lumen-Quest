@@ -3,15 +3,28 @@
 import type React from "react"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Zap, Shield, ArrowRight, Wifi, Download, Upload, Sparkles, TrendingUp } from "lucide-react"
+import { Zap, Shield, ArrowRight, Wifi, Download, Upload, Sparkles, TrendingUp, LogIn, LogOut } from "lucide-react"
+import { useAuth } from "@/components/auth-provider"
 
 export default function HomePage() {
   const [userType, setUserType] = useState<"user" | "admin">("user")
   const [isVisible, setIsVisible] = useState(false)
+  const { user, logout } = useAuth()
+  const router = useRouter()
+
+  const handleLogin = () => {
+    router.push("/auth/login")
+  }
+
+  const handleLogout = () => {
+    logout()
+    // User will stay on landing page after logout
+  }
 
   useEffect(() => {
     setIsVisible(true)
@@ -71,14 +84,34 @@ export default function HomePage() {
               className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up-fade"
               style={{ animationDelay: "0.4s" }}
             >
-              <Button size="lg" className="animate-pulse-glow hover-scale group">
-                Get Started
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button variant="outline" size="lg" className="hover-glow hover-lift bg-transparent">
-                View Plans
-                <Zap className="w-4 h-4 ml-2" />
-              </Button>
+              {user ? (
+                <>
+                  <Button size="lg" className="animate-pulse-glow hover-scale group">
+                    Get Started
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                  <Button variant="outline" size="lg" className="hover-glow hover-lift bg-transparent">
+                    View Plans
+                    <Zap className="w-4 h-4 ml-2" />
+                  </Button>
+                  <Button variant="destructive" size="lg" onClick={handleLogout} className="hover-glow hover-lift">
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button size="lg" onClick={handleLogin} className="animate-pulse-glow hover-scale group">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Login to Get Started
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                  <Button variant="outline" size="lg" className="hover-glow hover-lift bg-transparent">
+                    View Plans
+                    <Zap className="w-4 h-4 ml-2" />
+                  </Button>
+                </>
+              )}
             </div>
           </div>
 
