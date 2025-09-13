@@ -28,6 +28,10 @@ export default function HomePage() {
     // User will stay on landing page after logout
   }
 
+  const handleViewPlans = () => {
+    router.push("/plans")
+  }
+
   useEffect(() => {
     setIsVisible(true)
 
@@ -92,7 +96,12 @@ export default function HomePage() {
                     Get Started
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
-                  <Button variant="outline" size="lg" className="hover-glow hover-lift bg-transparent">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={handleViewPlans}
+                    className="hover-glow hover-lift bg-transparent"
+                  >
                     View Plans
                     <Zap className="w-4 h-4 ml-2" />
                   </Button>
@@ -108,7 +117,12 @@ export default function HomePage() {
                     Login to Get Started
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Button>
-                  <Button variant="outline" size="lg" className="hover-glow hover-lift bg-transparent">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={handleViewPlans}
+                    className="hover-glow hover-lift bg-transparent"
+                  >
                     View Plans
                     <Zap className="w-4 h-4 ml-2" />
                   </Button>
