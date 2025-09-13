@@ -14,8 +14,10 @@ import { useAuth } from "@/components/auth-provider"
 export default function HomePage() {
   const [userType, setUserType] = useState<"user" | "admin">("user")
   const [isVisible, setIsVisible] = useState(false)
-  const { user, logout } = useAuth()
+  const { user, isAuthenticated, logout } = useAuth()
   const router = useRouter()
+
+  console.log("[v0] Auth state - user:", user, "isAuthenticated:", isAuthenticated)
 
   const handleLogin = () => {
     router.push("/auth/login")
@@ -84,7 +86,7 @@ export default function HomePage() {
               className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up-fade"
               style={{ animationDelay: "0.4s" }}
             >
-              {user ? (
+              {isAuthenticated ? (
                 <>
                   <Button size="lg" className="animate-pulse-glow hover-scale group">
                     Get Started
