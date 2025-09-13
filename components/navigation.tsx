@@ -8,7 +8,6 @@ import {
   X,
   Zap,
   User,
-  Settings,
   BarChart3,
   CreditCard,
   Bell,
@@ -16,14 +15,19 @@ import {
   UserIcon,
   ToggleLeft,
   ToggleRight,
+  LogIn,
+  UserPlus,
+  LogOut,
 } from "lucide-react"
 
 interface NavigationProps {
   userType: "user" | "admin"
   onUserTypeChange?: (type: "user" | "admin") => void
+  isAuthenticated?: boolean
+  onLogout?: () => void
 }
 
-export function Navigation({ userType, onUserTypeChange }: NavigationProps) {
+export function Navigation({ userType, onUserTypeChange, isAuthenticated = true, onLogout }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const userNavItems = [
@@ -48,6 +52,12 @@ export function Navigation({ userType, onUserTypeChange }: NavigationProps) {
     onUserTypeChange?.(newType)
   }
 
+  const handleLogout = () => {
+    onLogout?.()
+    // Redirect to login page
+    window.location.href = "/auth/login"
+  }
+
   return (
     <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,55 +74,76 @@ export function Navigation({ userType, onUserTypeChange }: NavigationProps) {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item, index) => {
-              const Icon = item.icon
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors duration-200 animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </Link>
-              )
-            })}
-          </div>
+          {isAuthenticated && (
+            <div className="hidden md:flex items-center space-x-8">
+              {navItems.map((item, index) => {
+                const Icon = item.icon
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="flex items-center space-x-2 text-muted-foreground hover:text-foreground transition-colors duration-200 animate-fade-in-up"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          )}
 
           {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <div className="flex items-center space-x-6 px-6 py-4 bg-muted/50 rounded-lg animate-scale-in">
-              <div className="flex flex-col items-center space-y-2">
-                <UserIcon
-                  className={`w-4 h-4 ${userType === "user" ? "text-primary" : "text-muted-foreground"} transition-colors`}
-                />
-                <span className="text-xs font-medium text-muted-foreground">User</span>
-              </div>
-              <Button variant="ghost" size="sm" onClick={handleToggle} className="p-2 h-auto hover:bg-transparent">
-                {userType === "user" ? (
-                  <ToggleLeft className="w-6 h-6 text-primary hover:text-primary/80 transition-colors" />
-                ) : (
-                  <ToggleRight className="w-6 h-6 text-primary hover:text-primary/80 transition-colors" />
-                )}
-              </Button>
-              <div className="flex flex-col items-center space-y-2">
-                <Shield
-                  className={`w-4 h-4 ${userType === "admin" ? "text-primary" : "text-muted-foreground"} transition-colors`}
-                />
-                <span className="text-xs font-medium text-muted-foreground">Admin</span>
-              </div>
-            </div>
+            {isAuthenticated ? (
+              <>
+                <div className="flex items-center space-x-6 px-6 py-4 bg-muted/50 rounded-lg animate-scale-in">
+                  <div className="flex flex-col items-center space-y-2">
+                    <UserIcon
+                      className={`w-4 h-4 ${userType === "user" ? "text-primary" : "text-muted-foreground"} transition-colors`}
+                    />
+                    <span className="text-xs font-medium text-muted-foreground">User</span>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={handleToggle} className="p-2 h-auto hover:bg-transparent">
+                    {userType === "user" ? (
+                      <ToggleLeft className="w-6 h-6 text-primary hover:text-primary/80 transition-colors" />
+                    ) : (
+                      <ToggleRight className="w-6 h-6 text-primary hover:text-primary/80 transition-colors" />
+                    )}
+                  </Button>
+                  <div className="flex flex-col items-center space-y-2">
+                    <Shield
+                      className={`w-4 h-4 ${userType === "admin" ? "text-primary" : "text-muted-foreground"} transition-colors`}
+                    />
+                    <span className="text-xs font-medium text-muted-foreground">Admin</span>
+                  </div>
+                </div>
 
-            <Button variant="outline" size="sm" className="animate-scale-in bg-transparent">
-              <User className="w-4 h-4 mr-2" />
-              Profile
-            </Button>
-            <Button size="sm" className="animate-scale-in">
-              <Settings className="w-4 h-4 mr-2" />
-              Settings
-            </Button>
+                <Button variant="outline" size="sm" className="animate-scale-in bg-transparent">
+                  <User className="w-4 h-4 mr-2" />
+                  Profile
+                </Button>
+                <Button variant="outline" size="sm" className="animate-scale-in bg-transparent" onClick={handleLogout}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href="/auth/login">
+                  <Button variant="outline" size="sm" className="animate-scale-in bg-transparent">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button size="sm" className="animate-scale-in">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Sign Up
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -127,63 +158,88 @@ export function Navigation({ userType, onUserTypeChange }: NavigationProps) {
         {isOpen && (
           <div className="md:hidden animate-slide-in-right">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-card rounded-lg mt-2 border">
-              <div className="flex items-center justify-center px-4 py-4 mb-2 bg-muted/30 rounded-md">
-                <div className="flex items-center space-x-8">
-                  <div className="flex flex-col items-center space-y-2">
-                    <UserIcon
-                      className={`w-3 h-3 ${userType === "user" ? "text-primary" : "text-muted-foreground"} transition-colors`}
-                    />
-                    <span className="text-xs font-medium text-muted-foreground">User</span>
+              {isAuthenticated ? (
+                <>
+                  <div className="flex items-center justify-center px-4 py-4 mb-2 bg-muted/30 rounded-md">
+                    <div className="flex items-center space-x-8">
+                      <div className="flex flex-col items-center space-y-2">
+                        <UserIcon
+                          className={`w-3 h-3 ${userType === "user" ? "text-primary" : "text-muted-foreground"} transition-colors`}
+                        />
+                        <span className="text-xs font-medium text-muted-foreground">User</span>
+                      </div>
+                      <Button variant="ghost" size="sm" onClick={handleToggle} className="p-2 h-auto">
+                        {userType === "user" ? (
+                          <ToggleLeft className="w-5 h-5 text-primary" />
+                        ) : (
+                          <ToggleRight className="w-5 h-5 text-primary" />
+                        )}
+                      </Button>
+                      <div className="flex flex-col items-center space-y-2">
+                        <Shield
+                          className={`w-3 h-3 ${userType === "admin" ? "text-primary" : "text-muted-foreground"} transition-colors`}
+                        />
+                        <span className="text-xs font-medium text-muted-foreground">Admin</span>
+                      </div>
+                    </div>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={handleToggle} className="p-2 h-auto">
-                    {userType === "user" ? (
-                      <ToggleLeft className="w-5 h-5 text-primary" />
-                    ) : (
-                      <ToggleRight className="w-5 h-5 text-primary" />
-                    )}
-                  </Button>
-                  <div className="flex flex-col items-center space-y-2">
-                    <Shield
-                      className={`w-3 h-3 ${userType === "admin" ? "text-primary" : "text-muted-foreground"} transition-colors`}
-                    />
-                    <span className="text-xs font-medium text-muted-foreground">Admin</span>
-                  </div>
-                </div>
-              </div>
 
-              {navItems.map((item, index) => {
-                const Icon = item.icon
-                return (
+                  {navItems.map((item, index) => {
+                    const Icon = item.icon
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200 animate-fade-in-up"
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span>{item.label}</span>
+                      </Link>
+                    )
+                  })}
+                  <div className="border-t pt-2 mt-2">
+                    <Link
+                      href="/profile"
+                      className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <User className="w-4 h-4 mr-2" />
+                      <span>Profile</span>
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setIsOpen(false)
+                        handleLogout()
+                      }}
+                      className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200 w-full text-left"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      <span>Logout</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
                   <Link
-                    key={item.href}
-                    href={item.href}
-                    className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200 animate-fade-in-up"
-                    style={{ animationDelay: `${index * 0.1}s` }}
+                    href="/auth/login"
+                    className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200"
                     onClick={() => setIsOpen(false)}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span>{item.label}</span>
+                    <LogIn className="w-4 h-4" />
+                    <span>Login</span>
                   </Link>
-                )
-              })}
-              <div className="border-t pt-2 mt-2">
-                <Link
-                  href="/profile"
-                  className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <User className="w-4 h-4 mr-2" />
-                  <span>Profile</span>
-                </Link>
-                <Link
-                  href="/settings"
-                  className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Settings className="w-4 h-4 mr-2" />
-                  <span>Settings</span>
-                </Link>
-              </div>
+                  <Link
+                    href="/auth/signup"
+                    className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    <span>Sign Up</span>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}
