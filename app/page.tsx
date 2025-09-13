@@ -1,14 +1,37 @@
 "use client"
 
-import { useState } from "react"
+import type React from "react"
+
+import { useState, useEffect } from "react"
 import { Navigation } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Zap, Users, Shield, ArrowRight, Wifi, Download, Upload } from "lucide-react"
+import { Zap, Users, Shield, ArrowRight, Wifi, Download, Upload, Sparkles, TrendingUp } from "lucide-react"
 
 export default function HomePage() {
   const [userType, setUserType] = useState<"user" | "admin">("user")
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    setIsVisible(true)
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed")
+          }
+        })
+      },
+      { threshold: 0.1 },
+    )
+
+    const elements = document.querySelectorAll(".scroll-reveal")
+    elements.forEach((el) => observer.observe(el))
+
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <div className="min-h-screen bg-background">
@@ -16,26 +39,43 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="text-center animate-fade-in-up">
-            <Badge variant="secondary" className="mb-4 animate-scale-in">
-              <Zap className="w-3 h-3 mr-1" />
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/5 rounded-full animate-pulse-glow" />
+          <div
+            className="absolute -bottom-40 -left-40 w-96 h-96 bg-accent/5 rounded-full animate-pulse-glow"
+            style={{ animationDelay: "1s" }}
+          />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-primary/3 to-accent/3 rounded-full animate-rotate-slow" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="text-center">
+            <Badge variant="secondary" className="mb-4 animate-bounce-subtle hover-glow">
+              <Sparkles className="w-3 h-3 mr-1 animate-pulse" />
               Version 2.0 Now Live
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 text-balance">
-              Welcome to <span className="text-primary animate-pulse-glow">LUMEN Quest</span>
+
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 text-balance animate-fade-in-up">
+              Welcome to{" "}
+              <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent animate-gradient-shift">
+                LUMEN Quest
+              </span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto text-pretty">
+
+            <p
+              className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto text-pretty animate-slide-up-fade"
+              style={{ animationDelay: "0.2s" }}
+            >
               The ultimate subscription management platform for broadband services. Manage your plans, track usage, and
               optimize your connectivity with ease.
             </p>
 
             {/* User Type Selector */}
-            <div className="flex justify-center gap-4 mb-8 animate-scale-in">
+            <div className="flex justify-center gap-4 mb-8 animate-zoom-in" style={{ animationDelay: "0.4s" }}>
               <Button
                 variant={userType === "user" ? "default" : "outline"}
                 onClick={() => setUserType("user")}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 hover-lift transition-all duration-300"
               >
                 <Users className="w-4 h-4" />
                 End User Portal
@@ -43,42 +83,53 @@ export default function HomePage() {
               <Button
                 variant={userType === "admin" ? "default" : "outline"}
                 onClick={() => setUserType("admin")}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 hover-lift transition-all duration-300"
               >
                 <Shield className="w-4 h-4" />
                 Admin Portal
               </Button>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up">
-              <Button size="lg" className="animate-pulse-glow">
+            <div
+              className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up-fade"
+              style={{ animationDelay: "0.6s" }}
+            >
+              <Button size="lg" className="animate-pulse-glow hover-scale group">
                 Get Started
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" className="hover-glow hover-lift bg-transparent">
                 View Plans
                 <Zap className="w-4 h-4 ml-2" />
               </Button>
             </div>
           </div>
 
-          {/* Floating Elements */}
-          <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full animate-float" />
+          {/* Enhanced Floating Elements */}
+          <div className="absolute top-20 left-10 w-20 h-20 bg-primary/10 rounded-full animate-float hover-glow" />
           <div
-            className="absolute top-40 right-20 w-16 h-16 bg-accent/10 rounded-full animate-float"
+            className="absolute top-40 right-20 w-16 h-16 bg-accent/10 rounded-full animate-float hover-glow"
             style={{ animationDelay: "1s" }}
           />
           <div
-            className="absolute bottom-20 left-1/4 w-12 h-12 bg-primary/20 rounded-full animate-float"
+            className="absolute bottom-20 left-1/4 w-12 h-12 bg-primary/20 rounded-full animate-float hover-glow"
             style={{ animationDelay: "2s" }}
+          />
+          <div
+            className="absolute top-60 right-1/4 w-8 h-8 bg-secondary/15 rounded-full animate-bounce-subtle"
+            style={{ animationDelay: "0.5s" }}
+          />
+          <div
+            className="absolute bottom-40 right-10 w-14 h-14 bg-chart-3/10 rounded-full animate-float"
+            style={{ animationDelay: "1.5s" }}
           />
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-muted/30">
+      <section className="py-24 bg-muted/30 scroll-reveal">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-fade-in-up">
+          <div className="text-center mb-16 scroll-reveal">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               {userType === "admin" ? "Admin Features" : "User Features"}
             </h2>
@@ -89,12 +140,15 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
             {userType === "admin" ? (
               <>
-                <Card className="animate-slide-in-left hover:shadow-lg transition-shadow duration-300">
+                <Card
+                  className="scroll-reveal hover-lift hover-glow transition-all duration-300 group"
+                  style={{ "--index": 0 } as React.CSSProperties}
+                >
                   <CardHeader>
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <Zap className="w-6 h-6 text-primary" />
                     </div>
                     <CardTitle>Plan Management</CardTitle>
@@ -105,12 +159,12 @@ export default function HomePage() {
                 </Card>
 
                 <Card
-                  className="animate-slide-in-left hover:shadow-lg transition-shadow duration-300"
-                  style={{ animationDelay: "0.2s" }}
+                  className="scroll-reveal hover-lift hover-glow transition-all duration-300 group"
+                  style={{ "--index": 1 } as React.CSSProperties}
                 >
                   <CardHeader>
-                    <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
-                      <Users className="w-6 h-6 text-accent" />
+                    <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <TrendingUp className="w-6 h-6 text-accent" />
                     </div>
                     <CardTitle>User Analytics</CardTitle>
                     <CardDescription>
@@ -120,11 +174,11 @@ export default function HomePage() {
                 </Card>
 
                 <Card
-                  className="animate-slide-in-left hover:shadow-lg transition-shadow duration-300"
-                  style={{ animationDelay: "0.4s" }}
+                  className="scroll-reveal hover-lift hover-glow transition-all duration-300 group"
+                  style={{ "--index": 2 } as React.CSSProperties}
                 >
                   <CardHeader>
-                    <div className="w-12 h-12 bg-chart-3/10 rounded-lg flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 bg-chart-3/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <Shield className="w-6 h-6 text-chart-3" />
                     </div>
                     <CardTitle>Security & Control</CardTitle>
@@ -136,9 +190,12 @@ export default function HomePage() {
               </>
             ) : (
               <>
-                <Card className="animate-slide-in-left hover:shadow-lg transition-shadow duration-300">
+                <Card
+                  className="scroll-reveal hover-lift hover-glow transition-all duration-300 group"
+                  style={{ "--index": 0 } as React.CSSProperties}
+                >
                   <CardHeader>
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <Wifi className="w-6 h-6 text-primary" />
                     </div>
                     <CardTitle>Browse Plans</CardTitle>
@@ -149,11 +206,11 @@ export default function HomePage() {
                 </Card>
 
                 <Card
-                  className="animate-slide-in-left hover:shadow-lg transition-shadow duration-300"
-                  style={{ animationDelay: "0.2s" }}
+                  className="scroll-reveal hover-lift hover-glow transition-all duration-300 group"
+                  style={{ "--index": 1 } as React.CSSProperties}
                 >
                   <CardHeader>
-                    <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <Download className="w-6 h-6 text-accent" />
                     </div>
                     <CardTitle>Usage Tracking</CardTitle>
@@ -164,11 +221,11 @@ export default function HomePage() {
                 </Card>
 
                 <Card
-                  className="animate-slide-in-left hover:shadow-lg transition-shadow duration-300"
-                  style={{ animationDelay: "0.4s" }}
+                  className="scroll-reveal hover-lift hover-glow transition-all duration-300 group"
+                  style={{ "--index": 2 } as React.CSSProperties}
                 >
                   <CardHeader>
-                    <div className="w-12 h-12 bg-chart-3/10 rounded-lg flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 bg-chart-3/10 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <Upload className="w-6 h-6 text-chart-3" />
                     </div>
                     <CardTitle>Easy Management</CardTitle>
@@ -183,24 +240,36 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-24">
+      {/* Enhanced Stats Section */}
+      <section className="py-24 scroll-reveal">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center animate-scale-in">
-              <div className="text-4xl font-bold text-primary mb-2">50K+</div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 stagger-children">
+            <div
+              className="text-center scroll-reveal hover-scale group"
+              style={{ "--index": 0 } as React.CSSProperties}
+            >
+              <div className="text-4xl font-bold text-primary mb-2 group-hover:animate-pulse">50K+</div>
               <div className="text-muted-foreground">Active Users</div>
             </div>
-            <div className="text-center animate-scale-in" style={{ animationDelay: "0.1s" }}>
-              <div className="text-4xl font-bold text-accent mb-2">99.9%</div>
+            <div
+              className="text-center scroll-reveal hover-scale group"
+              style={{ "--index": 1 } as React.CSSProperties}
+            >
+              <div className="text-4xl font-bold text-accent mb-2 group-hover:animate-pulse">99.9%</div>
               <div className="text-muted-foreground">Uptime</div>
             </div>
-            <div className="text-center animate-scale-in" style={{ animationDelay: "0.2s" }}>
-              <div className="text-4xl font-bold text-chart-3 mb-2">24/7</div>
+            <div
+              className="text-center scroll-reveal hover-scale group"
+              style={{ "--index": 2 } as React.CSSProperties}
+            >
+              <div className="text-4xl font-bold text-chart-3 mb-2 group-hover:animate-pulse">24/7</div>
               <div className="text-muted-foreground">Support</div>
             </div>
-            <div className="text-center animate-scale-in" style={{ animationDelay: "0.3s" }}>
-              <div className="text-4xl font-bold text-chart-4 mb-2">1Gbps</div>
+            <div
+              className="text-center scroll-reveal hover-scale group"
+              style={{ "--index": 3 } as React.CSSProperties}
+            >
+              <div className="text-4xl font-bold text-chart-4 mb-2 group-hover:animate-pulse">1Gbps</div>
               <div className="text-muted-foreground">Max Speed</div>
             </div>
           </div>
@@ -208,11 +277,11 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-muted/50 border-t">
+      <footer className="bg-muted/50 border-t scroll-reveal">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <div className="w-6 h-6 bg-primary rounded-lg flex items-center justify-center">
+            <div className="flex items-center justify-center space-x-2 mb-4 hover-scale">
+              <div className="w-6 h-6 bg-primary rounded-lg flex items-center justify-center animate-pulse-glow">
                 <Zap className="w-4 h-4 text-primary-foreground" />
               </div>
               <span className="text-lg font-semibold">LUMEN Quest 2.0</span>

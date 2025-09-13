@@ -114,7 +114,7 @@ export default function AdminUsersPage() {
     switch (status) {
       case "active":
         return (
-          <Badge variant="default" className="bg-green-500 hover:bg-green-600">
+          <Badge variant="default" className="bg-blue-500 hover:bg-blue-600">
             <CheckCircle className="w-3 h-3 mr-1" />
             Active
           </Badge>
@@ -176,7 +176,7 @@ export default function AdminUsersPage() {
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-bold text-blue-600">
                 {users.filter((u) => u.status === "active").length}
               </div>
               <p className="text-xs text-muted-foreground">Currently subscribed</p>
@@ -324,7 +324,7 @@ export default function AdminUsersPage() {
                         {user.supportTickets > 0 ? (
                           <AlertTriangle className="w-4 h-4 text-orange-500" />
                         ) : (
-                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          <CheckCircle className="w-4 h-4 text-blue-500" />
                         )}
                         <span className="text-sm">{user.supportTickets}</span>
                       </div>
@@ -354,7 +354,7 @@ export default function AdminUsersPage() {
                             </DropdownMenuItem>
                           )}
                           {user.status === "suspended" && (
-                            <DropdownMenuItem className="text-green-600">
+                            <DropdownMenuItem className="text-blue-600">
                               <CheckCircle className="w-4 h-4 mr-2" />
                               Reactivate Account
                             </DropdownMenuItem>

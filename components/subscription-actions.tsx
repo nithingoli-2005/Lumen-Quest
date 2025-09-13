@@ -288,9 +288,9 @@ export function SubscriptionActions({
                               </div>
                             </div>
                             <div className="text-right">
-                              <div className="text-2xl font-bold text-green-600">${plan.price}</div>
+                              <div className="text-2xl font-bold text-blue-600">${plan.price}</div>
                               <div className="text-sm text-muted-foreground">per month</div>
-                              <Badge variant="secondary" className="mt-1 bg-green-100 text-green-700">
+                              <Badge variant="secondary" className="mt-1 bg-blue-100 text-blue-700">
                                 Save ${(currentPlan.price - plan.price).toFixed(2)}
                               </Badge>
                             </div>

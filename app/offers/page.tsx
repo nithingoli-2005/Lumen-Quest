@@ -149,7 +149,7 @@ export default function OffersPage() {
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case "success":
-        return <CheckCircle className="w-5 h-5 text-green-500" />
+        return <CheckCircle className="w-5 h-5 text-blue-500" />
       case "warning":
         return <AlertCircle className="w-5 h-5 text-yellow-500" />
       case "promotion":
@@ -162,7 +162,7 @@ export default function OffersPage() {
   const getOfferIcon = (type: string) => {
     switch (type) {
       case "discount":
-        return <Percent className="w-6 h-6 text-green-500" />
+        return <Percent className="w-6 h-6 text-blue-500" />
       case "upgrade":
         return <Zap className="w-6 h-6 text-blue-500" />
       case "bonus":
@@ -275,9 +275,9 @@ export default function OffersPage() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         {offer.discount && (
-                          <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                          <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
                             <div className="flex items-center justify-between">
-                              <span className="text-green-700 dark:text-green-400 font-medium">
+                              <span className="text-blue-700 dark:text-blue-400 font-medium">
                                 {offer.discount}% OFF
                               </span>
                               {offer.originalPrice && offer.newPrice && (
@@ -285,7 +285,7 @@ export default function OffersPage() {
                                   <span className="text-sm text-muted-foreground line-through">
                                     ${offer.originalPrice}
                                   </span>
-                                  <span className="text-lg font-bold text-green-600 ml-2">${offer.newPrice}</span>
+                                  <span className="text-lg font-bold text-blue-600 ml-2">${offer.newPrice}</span>
                                 </div>
                               )}
                             </div>

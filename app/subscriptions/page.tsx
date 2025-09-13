@@ -73,7 +73,7 @@ export default function SubscriptionsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "active":
-        return "bg-green-500"
+        return "bg-blue-500" // Changed from green to blue
       case "suspended":
         return "bg-yellow-500"
       case "cancelled":
@@ -186,12 +186,18 @@ export default function SubscriptionsPage() {
                     </div>
                   </div>
                   {subscription.dataQuota === "Unlimited" ? (
-                    <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-                      <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                      {" "}
+                      {/* Changed from green to blue */}
+                      <div className="flex items-center gap-2 text-blue-700 dark:text-blue-400">
+                        {" "}
+                        {/* Changed from green to blue */}
                         <CheckCircle className="w-5 h-5" />
                         <span className="font-medium">Unlimited Data</span>
                       </div>
-                      <p className="text-sm text-green-600 dark:text-green-500 mt-1">
+                      <p className="text-sm text-blue-600 dark:text-blue-500 mt-1">
+                        {" "}
+                        {/* Changed from green to blue */}
                         No data limits on your current plan
                       </p>
                     </div>
