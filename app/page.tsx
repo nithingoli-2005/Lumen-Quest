@@ -10,14 +10,16 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { Badge } from "@/components/ui/badge"
 import { Zap, Shield, ArrowRight, Wifi, Download, Upload, Sparkles, TrendingUp, LogIn, LogOut } from "lucide-react"
 import { useAuth } from "@/components/auth-provider"
+import { usePortal } from "@/components/portal-provider"
 
 export default function HomePage() {
-  const [userType, setUserType] = useState<"user" | "admin">("user")
+  const { userType } = usePortal()
   const [isVisible, setIsVisible] = useState(false)
   const { user, isAuthenticated, logout } = useAuth()
   const router = useRouter()
 
   console.log("[v0] Auth state - user:", user, "isAuthenticated:", isAuthenticated)
+  console.log("[v0] Portal state - userType:", userType)
 
   const handleLogin = () => {
     router.push("/auth/login")
@@ -54,7 +56,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation userType={userType} onUserTypeChange={setUserType} />
+      <Navigation isAuthenticated={isAuthenticated} onLogout={handleLogout} />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5">

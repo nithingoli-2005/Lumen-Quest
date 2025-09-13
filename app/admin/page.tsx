@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { usePortal } from "@/components/portal-provider"
 import {
   Users,
   Zap,
@@ -136,6 +137,7 @@ const mockSystemAlerts: SystemAlert[] = [
 ]
 
 export default function AdminDashboard() {
+  const { userType } = usePortal()
   const [stats] = useState<DashboardStats>(mockStats)
   const [recentActivity] = useState<RecentActivity[]>(mockRecentActivity)
   const [systemAlerts, setSystemAlerts] = useState<SystemAlert[]>(mockSystemAlerts)
@@ -193,7 +195,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation userType="admin" />
+      <Navigation />
 
       {/* Header */}
       <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16">

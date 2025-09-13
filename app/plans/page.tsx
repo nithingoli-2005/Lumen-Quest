@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { Wifi, Zap, Download, Upload, Clock, Shield, Star, Search, Filter, Check, ArrowRight } from "lucide-react"
+import { usePortal } from "@/components/portal-provider"
 
 interface Plan {
   id: string
@@ -124,6 +125,7 @@ const mockPlans: Plan[] = [
 ]
 
 export default function PlansPage() {
+  const { userType } = usePortal()
   const [searchTerm, setSearchTerm] = useState("")
   const [categoryFilter, setCategoryFilter] = useState<string>("all")
   const [priceRange, setPriceRange] = useState([0, 200])
@@ -148,7 +150,7 @@ export default function PlansPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation userType="user" />
+      <Navigation />
 
       {/* Header */}
       <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16">

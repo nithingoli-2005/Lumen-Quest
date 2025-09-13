@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SubscriptionActions } from "@/components/subscription-actions"
+import { usePortal } from "@/components/portal-provider"
 import {
   Wifi,
   Calendar,
@@ -67,6 +68,7 @@ const mockUsageHistory: UsageHistory[] = [
 ]
 
 export default function SubscriptionsPage() {
+  const { userType } = usePortal()
   const [subscription] = useState<Subscription>(mockSubscription)
   const [usageHistory] = useState<UsageHistory[]>(mockUsageHistory)
 
@@ -118,7 +120,7 @@ export default function SubscriptionsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation userType="user" />
+      <Navigation userType={userType} />
 
       {/* Header */}
       <section className="bg-gradient-to-br from-primary/5 via-background to-accent/5 py-16">

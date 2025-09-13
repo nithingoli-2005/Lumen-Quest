@@ -19,16 +19,16 @@ import {
   UserPlus,
   LogOut,
 } from "lucide-react"
+import { usePortal } from "@/components/portal-provider"
 
 interface NavigationProps {
-  userType: "user" | "admin"
-  onUserTypeChange?: (type: "user" | "admin") => void
   isAuthenticated?: boolean
   onLogout?: () => void
 }
 
-export function Navigation({ userType, onUserTypeChange, isAuthenticated = true, onLogout }: NavigationProps) {
+export function Navigation({ isAuthenticated = true, onLogout }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const { userType, toggleUserType } = usePortal()
 
   const userNavItems = [
     { href: "/", label: "Dashboard", icon: BarChart3 },
@@ -48,8 +48,8 @@ export function Navigation({ userType, onUserTypeChange, isAuthenticated = true,
   const navItems = userType === "admin" ? adminNavItems : userNavItems
 
   const handleToggle = () => {
-    const newType = userType === "user" ? "admin" : "user"
-    onUserTypeChange?.(newType)
+    toggleUserType()
+    console.log("[v0] Portal toggled to:", userType === "user" ? "admin" : "user")
   }
 
   const handleLogout = () => {
