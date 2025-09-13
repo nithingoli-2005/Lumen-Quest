@@ -7,7 +7,7 @@ import { Navigation } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Zap, Users, Shield, ArrowRight, Wifi, Download, Upload, Sparkles, TrendingUp } from "lucide-react"
+import { Zap, Shield, ArrowRight, Wifi, Download, Upload, Sparkles, TrendingUp } from "lucide-react"
 
 export default function HomePage() {
   const [userType, setUserType] = useState<"user" | "admin">("user")
@@ -35,7 +35,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation userType={userType} />
+      <Navigation userType={userType} onUserTypeChange={setUserType} />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-accent/5">
@@ -67,29 +67,9 @@ export default function HomePage() {
               optimize your connectivity with ease.
             </p>
 
-            {/* User Type Selector */}
-            <div className="flex justify-center gap-4 mb-8 animate-zoom-in" style={{ animationDelay: "0.4s" }}>
-              <Button
-                variant={userType === "user" ? "default" : "outline"}
-                onClick={() => setUserType("user")}
-                className="flex items-center gap-2 hover-lift transition-all duration-300"
-              >
-                <Users className="w-4 h-4" />
-                End User Portal
-              </Button>
-              <Button
-                variant={userType === "admin" ? "default" : "outline"}
-                onClick={() => setUserType("admin")}
-                className="flex items-center gap-2 hover-lift transition-all duration-300"
-              >
-                <Shield className="w-4 h-4" />
-                Admin Portal
-              </Button>
-            </div>
-
             <div
               className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up-fade"
-              style={{ animationDelay: "0.6s" }}
+              style={{ animationDelay: "0.4s" }}
             >
               <Button size="lg" className="animate-pulse-glow hover-scale group">
                 Get Started

@@ -3,14 +3,27 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Menu, X, Zap, User, Settings, BarChart3, CreditCard, Bell, Shield } from "lucide-react"
+import {
+  Menu,
+  X,
+  Zap,
+  User,
+  Settings,
+  BarChart3,
+  CreditCard,
+  Bell,
+  Shield,
+  UserIcon,
+  ToggleLeft,
+  ToggleRight,
+} from "lucide-react"
 
 interface NavigationProps {
   userType: "user" | "admin"
+  onUserTypeChange?: (type: "user" | "admin") => void
 }
 
-export function Navigation({ userType }: NavigationProps) {
+export function Navigation({ userType, onUserTypeChange }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const userNavItems = [
@@ -24,11 +37,16 @@ export function Navigation({ userType }: NavigationProps) {
     { href: "/admin", label: "Overview", icon: BarChart3 },
     { href: "/admin/plans", label: "Manage Plans", icon: Zap },
     { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-    { href: "/admin/users", label: "Users", icon: User },
+    { href: "/admin/users", label: "Users", icon: UserIcon },
     { href: "/admin/notifications", label: "Notifications", icon: Bell },
   ]
 
   const navItems = userType === "admin" ? adminNavItems : userNavItems
+
+  const handleToggle = () => {
+    const newType = userType === "user" ? "admin" : "user"
+    onUserTypeChange?.(newType)
+  }
 
   return (
     <nav className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50">
@@ -65,12 +83,28 @@ export function Navigation({ userType }: NavigationProps) {
 
           {/* User Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            {userType === "admin" && (
-              <Badge variant="secondary" className="animate-scale-in">
-                <Shield className="w-3 h-3 mr-1" />
-                Admin
-              </Badge>
-            )}
+            <div className="flex items-center space-x-6 px-6 py-4 bg-muted/50 rounded-lg animate-scale-in">
+              <div className="flex flex-col items-center space-y-2">
+                <UserIcon
+                  className={`w-4 h-4 ${userType === "user" ? "text-primary" : "text-muted-foreground"} transition-colors`}
+                />
+                <span className="text-xs font-medium text-muted-foreground">User</span>
+              </div>
+              <Button variant="ghost" size="sm" onClick={handleToggle} className="p-2 h-auto hover:bg-transparent">
+                {userType === "user" ? (
+                  <ToggleLeft className="w-6 h-6 text-primary hover:text-primary/80 transition-colors" />
+                ) : (
+                  <ToggleRight className="w-6 h-6 text-primary hover:text-primary/80 transition-colors" />
+                )}
+              </Button>
+              <div className="flex flex-col items-center space-y-2">
+                <Shield
+                  className={`w-4 h-4 ${userType === "admin" ? "text-primary" : "text-muted-foreground"} transition-colors`}
+                />
+                <span className="text-xs font-medium text-muted-foreground">Admin</span>
+              </div>
+            </div>
+
             <Button variant="outline" size="sm" className="animate-scale-in bg-transparent">
               <User className="w-4 h-4 mr-2" />
               Profile
@@ -93,6 +127,30 @@ export function Navigation({ userType }: NavigationProps) {
         {isOpen && (
           <div className="md:hidden animate-slide-in-right">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-card rounded-lg mt-2 border">
+              <div className="flex items-center justify-center px-4 py-4 mb-2 bg-muted/30 rounded-md">
+                <div className="flex items-center space-x-8">
+                  <div className="flex flex-col items-center space-y-2">
+                    <UserIcon
+                      className={`w-3 h-3 ${userType === "user" ? "text-primary" : "text-muted-foreground"} transition-colors`}
+                    />
+                    <span className="text-xs font-medium text-muted-foreground">User</span>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={handleToggle} className="p-2 h-auto">
+                    {userType === "user" ? (
+                      <ToggleLeft className="w-5 h-5 text-primary" />
+                    ) : (
+                      <ToggleRight className="w-5 h-5 text-primary" />
+                    )}
+                  </Button>
+                  <div className="flex flex-col items-center space-y-2">
+                    <Shield
+                      className={`w-3 h-3 ${userType === "admin" ? "text-primary" : "text-muted-foreground"} transition-colors`}
+                    />
+                    <span className="text-xs font-medium text-muted-foreground">Admin</span>
+                  </div>
+                </div>
+              </div>
+
               {navItems.map((item, index) => {
                 const Icon = item.icon
                 return (
@@ -109,20 +167,12 @@ export function Navigation({ userType }: NavigationProps) {
                 )
               })}
               <div className="border-t pt-2 mt-2">
-                {userType === "admin" && (
-                  <div className="px-3 py-2">
-                    <Badge variant="secondary">
-                      <Shield className="w-3 h-3 mr-1" />
-                      Admin
-                    </Badge>
-                  </div>
-                )}
                 <Link
                   href="/profile"
                   className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200"
                   onClick={() => setIsOpen(false)}
                 >
-                  <User className="w-4 h-4" />
+                  <User className="w-4 h-4 mr-2" />
                   <span>Profile</span>
                 </Link>
                 <Link
@@ -130,7 +180,7 @@ export function Navigation({ userType }: NavigationProps) {
                   className="flex items-center space-x-2 px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-md transition-colors duration-200"
                   onClick={() => setIsOpen(false)}
                 >
-                  <Settings className="w-4 h-4" />
+                  <Settings className="w-4 h-4 mr-2" />
                   <span>Settings</span>
                 </Link>
               </div>
